@@ -1,0 +1,1 @@
+Contains the different screens or pages of the application.

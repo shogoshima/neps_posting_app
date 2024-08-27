@@ -1,0 +1,1 @@
+Defines the navigation routes of the application, managing the transition between different screens.

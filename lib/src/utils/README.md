@@ -1,0 +1,1 @@
+Contains utility functions, constants, and other helper classes.

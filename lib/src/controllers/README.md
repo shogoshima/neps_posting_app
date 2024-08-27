@@ -1,0 +1,1 @@
+If using state management solutions like Provider, this directory can be used for managing the application's state.

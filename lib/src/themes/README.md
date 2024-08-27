@@ -1,0 +1,1 @@
+Contains theme-related files such as custom themes, colors, and styles.

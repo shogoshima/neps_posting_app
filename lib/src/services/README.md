@@ -1,0 +1,1 @@
+Contains services like API calls, local storage, and other utilities that interact with external data sources.
