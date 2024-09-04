@@ -20,9 +20,17 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Neps App',
         theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        ),
+            useMaterial3: true,
+            colorScheme: ColorScheme.fromSeed(
+                seedColor: const Color.fromARGB(255, 0, 0, 0),
+                primary: const Color.fromARGB(255, 10, 9, 56),
+                secondary: const Color.fromARGB(255, 255, 255, 255)),
+            textTheme: const TextTheme(
+              titleMedium: TextStyle(fontSize: 10.0, color: Colors.white),
+              bodyMedium: TextStyle(fontSize: 15.0, color: Colors.white),
+              bodySmall: TextStyle(
+                  fontSize: 15.0, color: Color.fromARGB(255, 0, 0, 0)),
+            )),
         home: const MyHomePage(),
       ),
     );
@@ -31,14 +39,60 @@ class MyApp extends StatelessWidget {
 
 class MyAppState extends ChangeNotifier {
   // Define your state variables and methods here
+  FetchApi api = FetchApi();
+
   bool loggedIn = false;
-  void login() {
-    loggedIn = true;
+  User loggedInUser = User(
+    username: '',
+    email: '',
+    birthdate: DateTime.now(),
+  );
+  void login(String username, String password) async {
+    try {
+      await api.login(username, password);
+      User user = await api.getAccountInfo();
+      loggedInUser = user;
+      loggedIn = true;
+    } catch (e) {
+      rethrow;
+    }
     notifyListeners();
   }
 
-  FetchApi api = FetchApi();
-  var posts = <Post>[];
+  void signup(User user) async {
+    try {
+      await api.signup(user);
+    } catch (e) {
+      rethrow;
+    }
+    notifyListeners();
+  }
+
+  void logout() async {
+    try {
+      await api.logout();
+      loggedIn = false;
+    } catch (e) {
+      rethrow;
+    }
+    notifyListeners();
+  }
+
+  int currentPostPage = 1;
+  int totalPostPages = 0;
+  List<Post> posts = [];
+
+  void addPosts(List<Post> newPosts) {
+    posts = newPosts;
+    notifyListeners();
+  }
+
+  void loadPosts(int page) async {
+    currentPostPage = page;
+    PostApiResponse response = await api.fetchPosts(page);
+    addPosts(response.posts);
+    notifyListeners();
+  }
 }
 
 class MyHomePage extends StatefulWidget {
@@ -61,57 +115,18 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
-    FetchApi api = FetchApi();
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Neps Posting App'),
-          titleTextStyle: const TextStyle(
-            color: Colors.white,
-            fontSize: 30,
-            fontWeight: FontWeight.normal,
-          ),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          toolbarHeight: 80,
-          actions: <Widget>[
-            MenuAnchor(
-              childFocusNode: _buttonFocusNode,
-              menuChildren: <Widget>[
-                MenuItemButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AccountPage()),
-                    );
-                  },
-                  child: const Text('Account'),
-                ),
-                MenuItemButton(
-                  onPressed: () {},
-                  child: const Text('Settings'),
-                ),
-                MenuItemButton(
-                  onPressed: () {},
-                  child: const Text('Send Feedback'),
-                ),
-              ],
-              builder: (_, MenuController controller, Widget? child) {
-                return IconButton(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  iconSize: 30,
-                  focusNode: _buttonFocusNode,
-                  onPressed: () {
-                    if (controller.isOpen) {
-                      controller.close();
-                    } else {
-                      controller.open();
-                    }
-                  },
-                  icon: const Icon(Icons.more_vert),
-                );
-              },
-            ),
-          ]),
+        title: const Text('Mini Feed'),
+        centerTitle: true,
+        titleTextStyle: const TextStyle(
+          color: Colors.white,
+          fontSize: 30,
+          fontWeight: FontWeight.normal,
+        ),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        toolbarHeight: 100,
+      ),
       bottomNavigationBar: NavigationBar(
         labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
         onDestinationSelected: (int index) {
@@ -132,14 +147,20 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(Icons.post_add),
             label: 'Create Post',
           ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.account_circle_outlined),
+            icon: Icon(Icons.account_circle),
+            label: 'Account',
+          )
         ],
       ),
       body: <Widget>[
         FutureBuilder(
-          future: api.fetchPosts(2),
+          future: appState.api.fetchPosts(appState.currentPostPage),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               appState.posts = snapshot.data?.posts ?? [];
+              appState.totalPostPages = snapshot.data?.pages ?? 0;
 
               return const ListPostPage();
             } else {
@@ -150,6 +171,7 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         ),
         const CreatePostPage(),
+        const AccountPage(),
       ][currentPageIndex],
     );
   }

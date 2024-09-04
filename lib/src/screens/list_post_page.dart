@@ -9,16 +9,40 @@ class ListPostPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
-    var posts = appState.posts;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Mini Feed'),
-      ),
-      body: ListView.builder(
-        itemCount: posts.length,
-        itemBuilder: (context, index) {
-          return PostCard(post: posts[index]);
-        },
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+        child: ListView.builder(
+          itemCount: appState.posts.length + 1,
+          itemBuilder: (context, index) {
+            if (index == appState.posts.length) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (int i = 0; i < appState.totalPostPages; i++)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: i + 1 == appState.currentPostPage
+                                ? Colors.blue
+                                : null,
+                          ),
+                          onPressed: i + 1 != appState.currentPostPage
+                              ? () => appState.loadPosts(i + 1)
+                              : null,
+                          child: Text((i + 1).toString()),
+                        ),
+                      ),
+                    )
+                ],
+              );
+            }
+            return PostCard(post: appState.posts[index]);
+          },
+        ),
       ),
     );
   }

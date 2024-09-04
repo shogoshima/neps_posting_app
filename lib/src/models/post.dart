@@ -2,15 +2,16 @@ import 'package:neps_posting_app/src/models/author.dart';
 
 class Post {
   final Author author;
-  final DateTime created = DateTime.now();
   final int id;
   final String text;
+  DateTime? created;
 
-  Post(
-      {required this.id,
-      required this.author,
-      required this.text,
-      DateTime? created});
+  Post({
+    required this.id,
+    required this.author,
+    required this.text,
+    this.created,
+  });
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
@@ -19,7 +20,7 @@ class Post {
       text: json['text'],
       created: json['created'] != null
           ? DateTime.parse(json['created'])
-          : null, // Parse date or use null,
+          : DateTime.now(),
     );
   }
 }
