@@ -21,6 +21,10 @@ class FetchApi {
   }
 
   Future<void> login(String username, String password) async {
+    if (username.isEmpty || password.isEmpty) {
+      throw Exception('Please enter username and password');
+    }
+
     final response = await http.post(
       Uri.parse('https://minifeed.neps.academy/auth/login'),
       body: json.encode({'username': username, 'password': password}),
@@ -62,8 +66,12 @@ class FetchApi {
   }
 
   Future<String> signup(User user) async {
+    if (user.username.isEmpty || user.email.isEmpty || user.password!.isEmpty) {
+      throw Exception('Please fill all the fields');
+    }
+
     final response = await http.post(
-      Uri.parse('https://minifeed.neps.academy/auth/signup'),
+      Uri.parse('https://minifeed.neps.academy/users/'),
       body: json.encode(user.toJson()),
       headers: {'Content-Type': 'application/json'},
     );

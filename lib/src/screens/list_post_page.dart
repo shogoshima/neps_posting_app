@@ -9,12 +9,13 @@ class ListPostPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0),
         child: ListView.builder(
-          itemCount: appState.posts.length + 1,
+          itemCount: appState.posts.length + 1, // +1 for pagination
           itemBuilder: (context, index) {
             if (index == appState.posts.length) {
               return Row(
@@ -23,24 +24,27 @@ class ListPostPage extends StatelessWidget {
                   for (int i = 0; i < appState.totalPostPages; i++)
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: SizedBox(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: i + 1 == appState.currentPostPage
-                                ? Colors.blue
-                                : null,
-                          ),
-                          onPressed: i + 1 != appState.currentPostPage
-                              ? () => appState.loadPosts(i + 1)
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: i + 1 == appState.currentPostPage
+                              ? Colors.grey
                               : null,
-                          child: Text((i + 1).toString()),
                         ),
+                        onPressed: i + 1 != appState.currentPostPage
+                            ? () => appState.loadPosts(i + 1)
+                            : () => {}, // Disable if current page
+                        child: Text((i + 1).toString()),
                       ),
-                    )
+                    ),
                 ],
               );
             }
-            return PostCard(post: appState.posts[index]);
+
+            // Return each PostCard
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: PostCard(post: appState.posts[index]),
+            );
           },
         ),
       ),

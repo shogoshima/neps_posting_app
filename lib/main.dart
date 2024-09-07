@@ -22,12 +22,16 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
             useMaterial3: true,
             colorScheme: ColorScheme.fromSeed(
-                seedColor: const Color.fromARGB(255, 0, 0, 0),
-                primary: const Color.fromARGB(255, 10, 9, 56),
-                secondary: const Color.fromARGB(255, 255, 255, 255)),
+              seedColor: const Color.fromARGB(255, 0, 0, 0),
+              primary: const Color.fromARGB(255, 12, 12, 83),
+              secondary: const Color.fromARGB(255, 201, 201, 201),
+              tertiary: const Color.fromARGB(255, 255, 46, 52),
+            ),
             textTheme: const TextTheme(
-              titleMedium: TextStyle(fontSize: 10.0, color: Colors.white),
-              bodyMedium: TextStyle(fontSize: 15.0, color: Colors.white),
+              titleMedium: TextStyle(
+                  fontSize: 10.0, color: Color.fromARGB(255, 0, 0, 0)),
+              bodyLarge: TextStyle(fontSize: 20.0, color: Colors.black),
+              bodyMedium: TextStyle(fontSize: 15.0, color: Colors.black),
               bodySmall: TextStyle(
                   fontSize: 15.0, color: Color.fromARGB(255, 0, 0, 0)),
             )),
@@ -47,7 +51,8 @@ class MyAppState extends ChangeNotifier {
     email: '',
     birthdate: DateTime.now(),
   );
-  void login(String username, String password) async {
+
+  Future<void> login(String username, String password) async {
     try {
       await api.login(username, password);
       User user = await api.getAccountInfo();
@@ -59,7 +64,7 @@ class MyAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void signup(User user) async {
+  Future<void> signup(User user) async {
     try {
       await api.signup(user);
     } catch (e) {
@@ -68,12 +73,12 @@ class MyAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void logout() async {
+  Future<void> logout() async {
     try {
       await api.logout();
       loggedIn = false;
     } catch (e) {
-      rethrow;
+      print(e);
     }
     notifyListeners();
   }
@@ -87,7 +92,7 @@ class MyAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void loadPosts(int page) async {
+  Future<void> loadPosts(int page) async {
     currentPostPage = page;
     PostApiResponse response = await api.fetchPosts(page);
     addPosts(response.posts);
@@ -116,6 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.primary,
       appBar: AppBar(
         title: const Text('Mini Feed'),
         centerTitle: true,
@@ -165,7 +171,9 @@ class _MyHomePageState extends State<MyHomePage> {
               return const ListPostPage();
             } else {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
               );
             }
           },

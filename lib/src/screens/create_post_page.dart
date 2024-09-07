@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neps_posting_app/main.dart';
+import 'package:neps_posting_app/src/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 class CreatePostPage extends StatefulWidget {
@@ -46,7 +47,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                   ),
                 ),
               ),
-              ElevatedButton(
+              CustomElevatedButton(
                 onPressed: () async {
                   try {
                     await appState.api.createPost(_controller.text);
@@ -55,6 +56,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
+                          contentTextStyle:
+                              Theme.of(context).textTheme.bodyLarge,
                           title: const Text('Thanks!'),
                           content: Text('You posted "${_controller.text}"!'),
                           actions: <Widget>[
@@ -74,6 +77,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
+                            contentTextStyle:
+                                Theme.of(context).textTheme.bodyLarge,
                             title: const Text('Error'),
                             content: Text('Failed to post: \n$e'),
                             actions: <Widget>[
@@ -88,7 +93,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                         });
                   }
                 },
-                child: const Text('Post'),
+                text: 'Post',
               ),
             ],
           ),
