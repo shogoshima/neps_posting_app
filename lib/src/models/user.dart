@@ -41,7 +41,7 @@ class User {
   String? password;
   int? id;
   Role? role;
-  DateTime? createdAt;
+  final DateTime createdAt;
 
   User({
     required this.username,
@@ -50,7 +50,7 @@ class User {
     this.password,
     this.id,
     this.role,
-    this.createdAt,
+    required this.createdAt,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {

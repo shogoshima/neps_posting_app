@@ -51,6 +51,7 @@ class MyAppState extends ChangeNotifier {
     username: '',
     email: '',
     birthdate: DateTime.now(),
+    createdAt: DateTime.now(),
   );
 
   Future<void> login(String username, String password) async {
