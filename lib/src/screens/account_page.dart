@@ -116,6 +116,9 @@ class _LoginSectionState extends State<_LoginSection> {
   // Input decoration helper
   InputDecoration _buildInputDecoration(BuildContext context, String label) {
     return InputDecoration(
+      border: const UnderlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      ),
       labelText: label,
       labelStyle: Theme.of(context).textTheme.bodyMedium,
       filled: true,

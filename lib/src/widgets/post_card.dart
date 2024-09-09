@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
 import 'package:neps_posting_app/src/models/models.dart';
+import 'package:markdown/markdown.dart' as md;
+import 'widgets.dart';
 
 class PostCard extends StatelessWidget {
   final Post post;
@@ -43,13 +45,15 @@ class PostCard extends StatelessWidget {
             MarkdownBody(
               data: post.text,
               selectable: true,
-              styleSheet: MarkdownStyleSheet(
-                code: const TextStyle(
-                    backgroundColor: Colors.black, color: Colors.white),
-                codeblockDecoration: const BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.all(Radius.circular(4)),
-                ),
+              builders: {
+                'code': CodeElementBuilder(),
+              },
+              extensionSet: md.ExtensionSet(
+                md.ExtensionSet.gitHubFlavored.blockSyntaxes,
+                <md.InlineSyntax>[
+                  md.EmojiSyntax(),
+                  ...md.ExtensionSet.commonMark.inlineSyntaxes,
+                ],
               ),
             ),
 

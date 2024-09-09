@@ -64,7 +64,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
         maxLines: 6,
         controller: _controller,
         decoration: InputDecoration(
-          border: const OutlineInputBorder(),
+          border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          ),
           hintText: 'Enter your post here',
           hintStyle: Theme.of(context).textTheme.bodyMedium,
           filled: true,
