@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 class FetchApi {
   Future<PostApiResponse> fetchPosts(int page) async {
     final response = await http.get(Uri.parse(
-        'https://minifeed.neps.academy/posts/?page=$page&reversed=false'));
+        'https://minifeed.neps.academy/posts/?page=$page&reversed=true'));
 
     if (response.statusCode == 200) {
       // Parse the JSON response

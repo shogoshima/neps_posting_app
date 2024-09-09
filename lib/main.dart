@@ -23,7 +23,6 @@ class MyApp extends StatelessWidget {
             useMaterial3: true,
             colorScheme: ColorScheme.fromSeed(
               seedColor: const Color.fromARGB(255, 12, 39, 63),
-              surface: const Color.fromARGB(255, 10, 10, 10),
               onSurface: const Color.fromARGB(255, 10, 10, 10),
               primary: const Color.fromARGB(255, 12, 39, 63),
               secondary: const Color.fromARGB(255, 255, 46, 52),

@@ -44,7 +44,12 @@ class PostCard extends StatelessWidget {
               data: post.text,
               selectable: true,
               styleSheet: MarkdownStyleSheet(
-                code: const TextStyle(color: Colors.white),
+                code: const TextStyle(
+                    backgroundColor: Colors.black, color: Colors.white),
+                codeblockDecoration: const BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                ),
               ),
             ),
 
