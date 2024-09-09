@@ -17,6 +17,7 @@ class PostCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Theme.of(context).colorScheme.tertiary,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -42,6 +43,9 @@ class PostCard extends StatelessWidget {
             MarkdownBody(
               data: post.text,
               selectable: true,
+              styleSheet: MarkdownStyleSheet(
+                code: const TextStyle(color: Colors.white),
+              ),
             ),
 
             const SizedBox(height: 10),

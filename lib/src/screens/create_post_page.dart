@@ -28,7 +28,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
     return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Colors.transparent,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -41,9 +41,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
                     hintText: 'Enter your post here',
-                    hintStyle: Theme.of(context).textTheme.bodySmall,
+                    hintStyle: Theme.of(context).textTheme.bodyMedium,
                     filled: true,
-                    fillColor: Theme.of(context).colorScheme.secondary,
+                    fillColor: Theme.of(context).colorScheme.tertiary,
                   ),
                 ),
               ),

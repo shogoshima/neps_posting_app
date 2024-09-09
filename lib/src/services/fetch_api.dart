@@ -126,7 +126,7 @@ class FetchApi {
 
     if (response.statusCode == 201) {
       final jsonResponse = json.decode(response.body);
-      print(jsonResponse['msg']);
+      return jsonResponse['msg'];
     } else {
       throw Exception('Failed to create post');
     }

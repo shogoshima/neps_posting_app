@@ -75,10 +75,10 @@ class _LoginSectionState extends State<_LoginSection> {
                 TextField(
                   controller: _usernameController,
                   decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
                     labelText: 'Username',
+                    labelStyle: Theme.of(context).textTheme.bodyMedium,
                     filled: true,
-                    fillColor: Theme.of(context).colorScheme.secondary,
+                    fillColor: Theme.of(context).colorScheme.tertiary,
                   ),
                 ),
                 const SizedBox(height: 15),
@@ -86,10 +86,10 @@ class _LoginSectionState extends State<_LoginSection> {
                   controller: _passwordController,
                   obscureText: true,
                   decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
                     labelText: 'Password',
+                    labelStyle: Theme.of(context).textTheme.bodyMedium,
                     filled: true,
-                    fillColor: Theme.of(context).colorScheme.secondary,
+                    fillColor: Theme.of(context).colorScheme.tertiary,
                   ),
                 ),
                 if (_isSignUp) ...[
@@ -98,30 +98,30 @@ class _LoginSectionState extends State<_LoginSection> {
                     controller: _confirmPasswordController,
                     obscureText: true,
                     decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
                       labelText: 'Confirm Password',
+                      labelStyle: Theme.of(context).textTheme.bodyMedium,
                       filled: true,
-                      fillColor: Theme.of(context).colorScheme.secondary,
+                      fillColor: Theme.of(context).colorScheme.tertiary,
                     ),
                   ),
                   const SizedBox(height: 15),
                   TextField(
                     controller: _emailController,
                     decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
                       labelText: 'Email',
+                      labelStyle: Theme.of(context).textTheme.bodyMedium,
                       filled: true,
-                      fillColor: Theme.of(context).colorScheme.secondary,
+                      fillColor: Theme.of(context).colorScheme.tertiary,
                     ),
                   ),
                   const SizedBox(height: 15),
                   TextFormField(
                     controller: _dobController,
                     decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
                       labelText: 'Date of Birth',
+                      labelStyle: Theme.of(context).textTheme.bodyMedium,
                       filled: true,
-                      fillColor: Theme.of(context).colorScheme.secondary,
+                      fillColor: Theme.of(context).colorScheme.tertiary,
                     ),
                     onTap: () async {
                       FocusScope.of(context).requestFocus(FocusNode());
@@ -287,7 +287,7 @@ class AccountPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: Colors.transparent,
       body: appState.loggedIn ? const _AccountInfo() : const _LoginSection(),
     );
   }

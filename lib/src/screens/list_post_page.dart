@@ -11,7 +11,7 @@ class ListPostPage extends StatelessWidget {
     var appState = context.watch<MyAppState>();
 
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: Colors.transparent,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0),
         child: ListView.builder(

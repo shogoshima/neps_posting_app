@@ -22,16 +22,18 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
             useMaterial3: true,
             colorScheme: ColorScheme.fromSeed(
-              seedColor: const Color.fromARGB(255, 0, 0, 0),
-              primary: const Color.fromARGB(255, 12, 12, 83),
-              secondary: const Color.fromARGB(255, 201, 201, 201),
-              tertiary: const Color.fromARGB(255, 255, 46, 52),
+              seedColor: const Color.fromARGB(255, 12, 39, 63),
+              surface: const Color.fromARGB(255, 10, 10, 10),
+              onSurface: const Color.fromARGB(255, 10, 10, 10),
+              primary: const Color.fromARGB(255, 12, 39, 63),
+              secondary: const Color.fromARGB(255, 255, 46, 52),
+              tertiary: const Color.fromARGB(255, 235, 235, 235),
             ),
             textTheme: const TextTheme(
               titleMedium: TextStyle(
-                  fontSize: 10.0, color: Color.fromARGB(255, 0, 0, 0)),
+                  fontSize: 15.0, color: Color.fromARGB(255, 0, 0, 0)),
               bodyLarge: TextStyle(fontSize: 20.0, color: Colors.black),
-              bodyMedium: TextStyle(fontSize: 15.0, color: Colors.black),
+              bodyMedium: TextStyle(fontSize: 17.0, color: Colors.black),
               bodySmall: TextStyle(
                   fontSize: 15.0, color: Color.fromARGB(255, 0, 0, 0)),
             )),
@@ -75,8 +77,8 @@ class MyAppState extends ChangeNotifier {
 
   Future<void> logout() async {
     try {
-      await api.logout();
       loggedIn = false;
+      await api.logout();
     } catch (e) {
       print(e);
     }
@@ -121,66 +123,92 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: const Text('Mini Feed'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            IconButton(
+                icon: Image.asset(
+                  'assets/logo_simplified.png',
+                  width: 50.0,
+                  height: 50.0,
+                ),
+                iconSize: 10.0,
+                onPressed: () {}),
+            const Text('Mini Feed'),
+          ],
+        ),
         centerTitle: true,
         titleTextStyle: const TextStyle(
           color: Colors.white,
           fontSize: 30,
           fontWeight: FontWeight.normal,
         ),
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Theme.of(context).colorScheme.onSurface,
         toolbarHeight: 100,
       ),
       bottomNavigationBar: NavigationBar(
+        backgroundColor: Theme.of(context).colorScheme.tertiary,
         labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
         onDestinationSelected: (int index) {
           setState(() {
             currentPageIndex = index;
           });
         },
-        indicatorColor: Colors.amber,
+        indicatorColor: Theme.of(context).colorScheme.secondary,
         selectedIndex: currentPageIndex,
         destinations: const <Widget>[
           NavigationDestination(
-            selectedIcon: Icon(Icons.book_outlined),
+            selectedIcon: Icon(Icons.book_outlined, color: Colors.white),
             icon: Icon(Icons.book),
             label: 'Feed',
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.post_add_outlined),
+            selectedIcon: Icon(Icons.post_add_outlined, color: Colors.white),
             icon: Icon(Icons.post_add),
             label: 'Create Post',
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.account_circle_outlined),
+            selectedIcon:
+                Icon(Icons.account_circle_outlined, color: Colors.white),
             icon: Icon(Icons.account_circle),
             label: 'Account',
           )
         ],
       ),
-      body: <Widget>[
-        FutureBuilder(
-          future: appState.api.fetchPosts(appState.currentPostPage),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              appState.posts = snapshot.data?.posts ?? [];
-              appState.totalPostPages = snapshot.data?.pages ?? 0;
+      body: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Theme.of(context).colorScheme.onSurface,
+            Theme.of(context).colorScheme.primary,
+          ],
+        )),
+        child: <Widget>[
+          FutureBuilder(
+            future: appState.api.fetchPosts(appState.currentPostPage),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                appState.posts = snapshot.data?.posts ?? [];
+                appState.totalPostPages = snapshot.data?.pages ?? 0;
 
-              return const ListPostPage();
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                ),
-              );
-            }
-          },
-        ),
-        const CreatePostPage(),
-        const AccountPage(),
-      ][currentPageIndex],
+                return const ListPostPage();
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
+                );
+              }
+            },
+          ),
+          const CreatePostPage(),
+          const AccountPage(),
+        ][currentPageIndex],
+      ),
     );
   }
 }
